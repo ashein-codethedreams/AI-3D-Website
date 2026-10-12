@@ -1,10 +1,12 @@
 export const downloadCanvasToImage = () => {
   const canvas = document.querySelector("canvas");
+  if (!canvas) throw new Error("The 3D preview is not ready to export yet.");
+
   const dataURL = canvas.toDataURL();
   const link = document.createElement("a");
 
   link.href = dataURL;
-  link.download = "canvas.png";
+  link.download = "form-custom-tee.png";
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
@@ -14,6 +16,7 @@ export const reader = (file) =>
   new Promise((resolve, reject) => {
     const fileReader = new FileReader();
     fileReader.onload = () => resolve(fileReader.result);
+    fileReader.onerror = () => reject(fileReader.error || new Error("Unable to read file"));
     fileReader.readAsDataURL(file);
   });
 
